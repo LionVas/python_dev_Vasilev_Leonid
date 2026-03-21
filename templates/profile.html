@@ -1,10 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>{{login}}</title>
+       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
 </head>
-<body>
-$END$
+<body class="p-1">
+<h1 style="color:green">{{login}}</h1>
+<!--<h2> {{posts}}</h2>>-->
+<div class = "d-flex mb-6 w-100">
+    <div class = "mb-4 w-50 d-flex flex-column">
+    {%for post in posts%}
+
+        <h2>{{post[0]}}</h2>
+        <h4>Id поста {{post[2]}}</h4>
+        <h4>Id блога {{post[3]}}</h4>
+        <span class="text-wrap" style="word-wrap: break-word; overflow-wrap: break-word;">{{ post[1] }}</span>
+
+        <hr>
+    {%endfor%}
+    </div>
+    <div class = "p-3 w-50 d-flex flex-column">
+        <form method="post">
+            <h3>Создать пост</h3>
+            <input type="text" name="blog_id" id = "blog_id" placeholder="id блога" class="form-control mb-3">
+            <input type="text" name="post_header" id = "post_header" placeholder="Заголовок поста" class="form-control mb-3">
+            <input type="text" name="post_content" id = "post_content" placeholder="Текст поста" class="form-control mb-3">
+            <button class="btn btn-primary" type="submit" name="post_create">Создать пост</button>
+        </form>
+        <br>
+        <form method="post">
+            <h3>Создать блог</h3>
+            <input type="text" name="blog_name" id = "blog_name" placeholder="Название блога" class="form-control mb-3">
+            <input type="text" name="blog_description" id = "blog_description" placeholder="Описание блога" class="form-control mb-3">
+            <button class="btn btn-primary" type="submit" name="blog_create">Создать пост</button>
+        </form>
+        <br>
+        <form method="post">
+            <h3>Прокомментировать пост</h3>
+            <input type="text" name="post_id" id = "post_id" placeholder="id поста" class="form-control mb-3">
+            <input type="text" name="comment" id = "comment" placeholder="Текст комментария" class="form-control mb-3">
+            <button class="btn btn-primary" type="submit" name="comment">Прокомментировать</button>
+        </form>
+        <br>
+        <form method="post">
+            <h3>Удалить пост</h3>
+            <input type="text" name="del_post_id" id = "del_post_id" placeholder="id поста" class="form-control mb-3">
+            <button class="btn btn-primary" type="submit" name="delete">Удалить пост</button>
+        </form>
+        <br>
+        <form method = "post"><button class="btn btn-primary w-25 bg-danger border-0" type="submit" name="logout">Выйти</button></form>
+
+    </div>
+
+</div>
+
+
 </body>
 </html>
