@@ -21,7 +21,7 @@ def generate_general(login):
         user_id = get_user_id(login, cursor)
         cursor = database.get_dataset_log_cursor()
         cursor.execute(
-            "SELECT date(datetime), COUNT(CASE WHEN event_type_id=1 THEN 1 END), COUNT(CASE WHEN event_type_id=6 THEN 1 END), COUNT(CASE WHEN space_type_id = 2 THEN 1 END) FROM logs WHERE user_id = ? GROUP BY date(datetime)",
+            "SELECT date(datetime), COUNT(CASE WHEN event_type_id=1 THEN 1 END), COUNT(CASE WHEN event_type_id=6 THEN 1 END), COUNT(CASE WHEN space_type_id <=2 THEN 1 END) FROM logs WHERE user_id = ? GROUP BY date(datetime)",
             (user_id,))
         res = cursor.fetchall()
         for elem in res:
