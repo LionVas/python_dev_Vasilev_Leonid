@@ -1,13 +1,12 @@
-from datetime import datetime, timezone
+from datetime import datetime
 
-
-import Blogs_controller
-from DBconnection import database
+from .Blogs_controller import get_user_id
+from .DBconnection import database
 def log(space_type_id, event_type_id, login):
     with database.logs_db:
         cursor = database.get_logs_cursor()
         time = datetime.now().isoformat()
-        user_id = Blogs_controller.get_user_id(login)
+        user_id = get_user_id(login, database.get_blog_cursor())
         cursor.execute("INSERT INTO logs (datetime, user_id, space_type_id, event_type_id) VALUES ( ?, ?, ?, ?)", ( time, user_id, space_type_id, event_type_id ))
 def log_login(login):
     log(3,1,login)

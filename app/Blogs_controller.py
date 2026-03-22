@@ -1,15 +1,15 @@
 import sqlite3
 
-from DBconnection import database
+from .DBconnection import database
 
 
-def get_user_id(login):
-    cursor = database.get_blog_cursor()
+def get_user_id(login, cursor):
+   # cursor = database.get_blog_cursor()
     cursor.execute('SELECT id FROM author WHERE login = ?', (login,))
-    user_id = cursor.fetchall()[0][0];
+    user_id = cursor.fetchall()[0][0]
     return user_id
-def login_check(login):
-    cursor = database.get_blog_cursor()
+def login_check(login, cursor):
+   # cursor = database.get_blog_cursor()
     cursor.execute('SELECT * FROM author WHERE login = ?', (login,))
     users = cursor.fetchall()
     if len(users) == 1:
@@ -30,7 +30,7 @@ def create_post(login, header, post_content, blog_id):
     try:
         with database.blog_db:
             cursor = database.get_blog_cursor()
-            user_id = get_user_id(login)
+            user_id = get_user_id(login, cursor)
             cursor.execute('SELECT count(*) FROM blog WHERE id = ?', (blog_id,))
             count = cursor.fetchone()[0]
             if count > 0:
@@ -45,25 +45,25 @@ def create_blog(login, blog_name, blog_description):
     try:
         with database.blog_db:
             cursor = database.get_blog_cursor()
-            user_id = get_user_id(login)
+            user_id = get_user_id(login, cursor)
             cursor.execute("INSERT INTO blog (owner_id, name, description) VALUES(?, ?, ?)", (user_id, blog_name, blog_description))
             return True
     except Exception as e:
         return False
 
-def delete_post(login, id):
+def delete_post(login, post_id):
     try:
         with database.blog_db:
             cursor = database.get_blog_cursor()
-            user_id = get_user_id(login)
-            cursor.execute('SELECT author_id FROM post WHERE id = ?', (id,))
+            user_id = get_user_id(login, cursor)
+            cursor.execute('SELECT author_id FROM post WHERE id = ?', (post_id,))
             res = cursor.fetchall()
             if len(res) == 0:
                 return False
             else:
                 author_id = res[0][0]
             if author_id == user_id:
-                cursor.execute('DELETE FROM post WHERE id = ?', (id,))
+                cursor.execute('DELETE FROM post WHERE id = ?', (post_id,))
                 database.blog_db.commit()
                 return True
     except Exception as e:
@@ -74,13 +74,19 @@ def comment_post(login, post_id, comment):
     try:
         with database.blog_db:
             cursor = database.get_blog_cursor()
-            user_id = get_user_id(login)
+            user_id = get_user_id(login, cursor)
             cursor.execute('SELECT count(*) FROM post WHERE id = ?', (post_id,))
-            count = cursor.fetchone()[0]
+            res = cursor.fetchone()
+            if  len(res) != 0:
+                count = res[0]
+            else:
+                return False
+
             if count > 0:
                 cursor.execute("INSERT INTO comment (author_id, post_id, text) VALUES(?, ?, ?)", (user_id,post_id,comment))
                 return True
             else:
                 return False
     except Exception as e:
+        print(e)
         return False
