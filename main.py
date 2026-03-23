@@ -81,9 +81,9 @@ def general():
         req_login = request.args.get('login')
         comms = Dataset_generator.generate_general(req_login)
         return jsonify(comms)
-#@app.errorhandler(Exception)
-# def handle_error(e):
-#     print(e)
-#     return render_template('error.html', error=e)
+@app.errorhandler(Exception)
+def handle_error(e):
+    print(e)
+    return render_template('error.html', error=e)
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)
